@@ -1,30 +1,22 @@
 <?php
-			/*versión de PHP 5.5*/
-	//Guarda en el email donde se enviará la información
-	$vEmail = "jvizcaino.ina@gmail.com";
+        $name = $_POST['formNombre'];
+        $mail = $_POST['formCorreo'];
+        $message = $_POST['formMensaje'];
 
-	//Guarda el asunto del email
-	$vAsunto = "Comentarios del Usuario";
+        $header = 'From: ' . $mail . " \r\n";
+        $header .= "X-Mailer: PHP/" . phpversion() . " \r\n";
+        $header .= "Mime-Version: 1.0 \r\n";
+        $header .= "Content-Type: text/plain";
 
-	//Crea variables para guardar los datos que vienen del formulario
-	$vNombre  = $_POST["formNombre"];
-	$vCorreo  = $_POST["formCorreo"];
-	$vMensaje = $_POST["formMensaje"];
+        $message = "Este mensaje fue enviado por: " . $name . " \r\n";
+        $message .= "Su e-mail es: " . $mail . " \r\n";
+        $message .= "Mensaje: " . $_POST['formMensaje'] . " \r\n";
+        $message .= "Enviado el: " . date('d/m/Y', time());
 
-	/*Combina toda la información en un solo mensaje
-		(concatena texto y contenido de las variables)
-		
-		punto 	= sirve para concatenar
-		\n 		= sirve para crear un salto del línea*/
-	$vMensajeCompleto = "Nombre del Usuario: " 	.$vNombre ."\n"
-						."Correo Personal: "	.$vCorreo ."\n"
-						."Mensaje del Usuario: ".$vMensaje;
-	
-	/*Página donde va a ser redirigidad después de presionar el botón de enviar*/
-	$vPaginaRedirigir = "../agradecimiento.html";
+        $para = 'jvizcaino.ina@gmail.com';
+        $asunto = 'Mensaje del usuario';
 
-	/*Envía la información capturada hacia un correo electrónico
-		mail 	=> coloca el correo, asunto, cuerpo del correo
-		header 	=> ayuda a redirigir hacia otra página web*/
-	if(mail ($vEmail,$vAsunto,$vMensajeCompleto))Header("location: $vPaginaRedirigir");
+        mail($para, $asunto, utf8_decode($message), $header);
+
+        header("Location:../agradecimiento.html");
 ?>
