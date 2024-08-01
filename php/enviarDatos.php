@@ -1,35 +1,30 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtiene los datos del formulario
-    $nombre = htmlspecialchars(trim($_POST['formNombre']));
-    $email = filter_var(trim($_POST['formCorreo']), FILTER_SANITIZE_EMAIL);
-    $mensaje = htmlspecialchars(trim($_POST['formMensaje']));
+			/*versión de PHP 5.5*/
+	//Guarda en el email donde se enviará la información
+	$vEmail = "jvizcaino.ina@gmail.com";
 
-    // Valida que los datos no estén vacíos
-    if (empty($nombre) || empty($email) || empty($mensaje)) {
-        echo "Por favor, completa todos los campos.";
-        exit;
-    }
+	//Guarda el asunto del email
+	$vAsunto = "Comentarios del Usuario";
 
-    // Valida el formato del correo electrónico
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "Correo electrónico no válido.";
-        exit;
-    }
+	//Crea variables para guardar los datos que vienen del formulario
+	$vNombre  = $_POST["formNombre"];
+	$vCorreo  = $_POST["formCorreo"];
+	$vMensaje = $_POST["formMensaje"];
 
-    // Datos del correo
-    $para = "jvizcaino.ina@gmail.com";
-    $asunto = "Comentarios del usuario $nombre";
-    $cuerpo = "Nombre: $nombre\nCorreo Electrónico: $email\nMensaje:\n$mensaje";
-    $encabezados = "From: $email";
+	/*Combina toda la información en un solo mensaje
+		(concatena texto y contenido de las variables)
+		
+		punto 	= sirve para concatenar
+		\n 		= sirve para crear un salto del línea*/
+	$vMensajeCompleto = "Nombre del Usuario: " 	.$vNombre ."\n"
+						."Correo Personal: "	.$vCorreo ."\n"
+						."Mensaje del Usuario: ".$vMensaje;
+	
+	/*Página donde va a ser redirigidad después de presionar el botón de enviar*/
+	$vPaginaRedirigir = "../agradecimiento.html";
 
-    // Envía el correo
-    if (mail($para, $asunto, $cuerpo, $encabezados)) {
-        echo "Correo enviado exitosamente.";
-    } else {
-        echo "Error al enviar el correo.";
-    }
-} else {
-    echo "Método de solicitud no válido.";
-}
+	/*Envía la información capturada hacia un correo electrónico
+		mail 	=> coloca el correo, asunto, cuerpo del correo
+		header 	=> ayuda a redirigir hacia otra página web*/
+	if(mail ($vEmail,$vAsunto,$vMensajeCompleto))Header("location: $vPaginaRedirigir");
 ?>
